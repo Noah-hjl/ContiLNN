@@ -80,6 +80,17 @@ reductions in absolute error relative to Restore-RWKV, measured in
 normalized display intensity; error increases are clipped to zero.
 </em></p>
 
+## Pretrained models
+
+| Model | CT | MRI | PET |
+|---|---|---|---|
+| ContiLNN-RWKV | [Download](https://github.com/Noah-hjl/ContiLNN/releases/download/pretrained-v1/ContiLNN_RWKV_CT.pth) | [Download](https://github.com/Noah-hjl/ContiLNN/releases/download/pretrained-v1/ContiLNN_RWKV_MRI.pth) | [Download](https://github.com/Noah-hjl/ContiLNN/releases/download/pretrained-v1/ContiLNN_RWKV_PET.pth) |
+| ContiLNN-DASMamba | [Download](https://github.com/Noah-hjl/ContiLNN/releases/download/pretrained-v1/ContiLNN_DASMamba_CT.pth) | [Download](https://github.com/Noah-hjl/ContiLNN/releases/download/pretrained-v1/ContiLNN_DASMamba_MRI.pth) | [Download](https://github.com/Noah-hjl/ContiLNN/releases/download/pretrained-v1/ContiLNN_DASMamba_PET.pth) |
+
+Each checkpoint contains the complete backbone and Bi-CfC modules. Save the
+downloaded files in `checkpoints/` and use the matching modality in the
+evaluation commands below.
+
 ## Repository organization
 
 ```text
@@ -113,11 +124,19 @@ For ContiLNN-DASMamba:
 ```bash
 conda env create -f environments/environment-dasmamba.yml
 conda activate contilnn-dasmamba
+python -m pip install --no-build-isolation causal-conv1d==1.4.0 mamba-ssm==2.2.2
 ```
 
-The DASMamba wrapper expects the pinned upstream source revision documented in
-[`docs/SOURCE_PROVENANCE.md`](docs/SOURCE_PROVENANCE.md). The Restore-RWKV WKV
-extension is compiled lazily on its first CUDA execution. Set
+Use the pinned DASMamba source revision documented in
+[`docs/SOURCE_PROVENANCE.md`](docs/SOURCE_PROVENANCE.md):
+
+```bash
+git clone https://github.com/cc111mp/DASMamba-MedIR.git ../DASMamba-MedIR
+git -C ../DASMamba-MedIR checkout 8baea1839d800563a1670bb27410509aa7fcbf28
+export PYTHONPATH="$(cd ../DASMamba-MedIR && pwd)${PYTHONPATH:+:$PYTHONPATH}"
+```
+
+The Restore-RWKV WKV extension is compiled on its first CUDA execution. Set
 `CONTILNN_CUDA_ARCH=80` when an explicit compute capability is required for an
 NVIDIA A800 or A100 build.
 
@@ -205,7 +224,7 @@ contilnn train \
   --data-root /path/to/data \
   --modality PET \
   --stage-a-checkpoint /path/to/dasmamba_best.pth \
-  --backbone-factory your_package.factory:create_dasmamba \
+  --backbone-factory model.DASMamba:DASMamba \
   --output-dir runs/dasmamba_pet \
   --seed <SEED> \
   --learning-rate-base <LR> \
@@ -217,7 +236,9 @@ contilnn train \
   --device cuda
 ```
 
-### 4. Evaluate a validation-selected checkpoint
+### 4. Evaluate a pretrained model
+
+For ContiLNN-RWKV:
 
 ```bash
 contilnn evaluate \
@@ -225,15 +246,31 @@ contilnn evaluate \
   --data-root /path/to/data \
   --modality PET \
   --split test \
-  --checkpoint runs/rwkv_pet/best.pth \
+  --checkpoint checkpoints/ContiLNN_RWKV_PET.pth \
   --output-dir results/rwkv_pet \
   --device cuda
 ```
 
+For ContiLNN-DASMamba:
+
+```bash
+contilnn evaluate \
+  --protocol dasmamba \
+  --backbone-factory model.DASMamba:DASMamba \
+  --data-root /path/to/data \
+  --modality PET \
+  --split test \
+  --checkpoint checkpoints/ContiLNN_DASMamba_PET.pth \
+  --output-dir results/dasmamba_pet \
+  --device cuda
+```
+
+For CT or MRI, change `--modality` and select the corresponding checkpoint.
+To evaluate a model trained with this repository, use its `best.pth` instead.
+
 Evaluation covers every real slice using overlapping windows with the two
 paper-defined offsets. It writes `per_slice.csv`, `per_case.csv`, and
-`summary.json`. DASMamba evaluation additionally takes the same
-`--backbone-factory` argument used for training.
+`summary.json`.
 
 ## Verification
 
@@ -245,9 +282,7 @@ python -m unittest discover -s tests -v
 
 The tests cover modality-specific filename parsing and reader isolation,
 protocol consistency, objective and metric calculations, checkpoint format,
-and command-line orchestration. GPU kernels and complete medical-dataset runs
-remain environment-dependent and should be validated on the intended CUDA
-system.
+and command-line orchestration.
 
 ## License and attribution
 

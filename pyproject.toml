@@ -24,7 +24,7 @@ dependencies = [
 dasmamba = [
   "causal-conv1d>=1.1",
   "mamba-ssm>=1.2",
-  "timm>=0.9",
+  "timm>=0.4.12",
 ]
 [project.scripts]
 contilnn = "contilnn.cli:main"

@@ -5,11 +5,17 @@ channels:
   - nvidia
   - conda-forge
 dependencies:
-  - python=3.8
+  - python=3.9
   - pytorch=2.0.1
   - pytorch-cuda=11.8
-  - cuda-nvcc=11.8
+  - cuda-toolkit=11.8
   - ninja
   - pip
+  - setuptools=80.9.0
+  - wheel
   - pip:
+      - numpy==1.26.4
+      - einops==0.8.1
+      - ncps==1.0.1
+      - SimpleITK==2.5.2
       - -e .
