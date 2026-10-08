@@ -1,0 +1,13 @@
+# Editor: Jialei.He
+name: contilnn-dasmamba
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pytorch=2.4.1
+  - pytorch-cuda=12.1
+  - pip
+  - pip:
+      - -e .[dasmamba]

@@ -1,0 +1,41 @@
+{
+  "editor": "Jialei.He",
+  "paper_order": 2,
+  "experiment": "contilnn_dasmamba_transfer",
+  "backbone": "DASMamba",
+  "operator": "bidirectional_cfc",
+  "num_seeds": 5,
+  "model": {
+    "dim": 48,
+    "cfc_hidden": 256
+  },
+  "modalities": {
+    "CT": {"train_cases": 8, "validation_cases": 1, "test_cases": 1, "epoch_cap": 60},
+    "MRI": {"train_cases": 405, "validation_cases": 58, "test_cases": 114, "epoch_cap": 100},
+    "PET": {"train_cases": 120, "validation_cases": 10, "test_cases": 29, "epoch_cap": 60}
+  },
+  "data": {
+    "sequence_length": 7,
+    "patch_size": 128,
+    "slice_index_gap": 1,
+    "retain_short_tail": true,
+    "evaluation_offsets": [0, 3],
+    "overlap_fusion": "mean"
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "scheduler": "CosineAnnealingLR",
+    "scheduler_interval": "optimizer_step",
+    "precision": "fp32",
+    "batch_size": 1,
+    "initialization": "highest_validation_psnr_backbone_checkpoint",
+    "teacher": "frozen_matching_backbone",
+    "retain_native_spatial_loss": true,
+    "retain_native_fourier_loss": true,
+    "native_fourier_weight": 1.0,
+    "consistency": 0.30,
+    "second_order_multiplier": 2.0,
+    "teacher_distillation": 0.05,
+    "checkpoint_selection": "highest_validation_psnr"
+  }
+}

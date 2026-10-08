@@ -1,0 +1,21 @@
+ContiLNN
+Copyright 2026 Jialei.He
+
+This product includes software derived from Restore-RWKV:
+https://github.com/Yaziwel/Restore-RWKV
+Copyright Shanghai AI Lab, licensed under the Apache License, Version 2.0.
+
+The files src/contilnn/models/restore_rwkv.py and
+src/contilnn/models/cuda/* retain the corresponding upstream copyright
+notices. Their provenance is documented in docs/SOURCE_PROVENANCE.md.
+
+ContiLNN also provides an integration wrapper for DASMamba:
+https://github.com/cc111mp/DASMamba-MedIR
+The upstream DASMamba source is not redistributed in this repository and must
+be obtained separately at the revision recorded in docs/SOURCE_PROVENANCE.md.
+
+Portions of src/contilnn/evaluation/metrics.py are adapted from pytorch-ssim:
+https://github.com/Po-Hsun-Su/pytorch-ssim
+pytorch-ssim is maintained by Po-Hsun Su and distributed under the MIT License.
+The source and license provenance are documented in THIRD_PARTY_NOTICES.md and
+docs/SOURCE_PROVENANCE.md.

@@ -1,0 +1,15 @@
+# Editor: Jialei.He
+name: contilnn-rwkv
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pytorch=2.0.1
+  - pytorch-cuda=11.8
+  - cuda-nvcc=11.8
+  - ninja
+  - pip
+  - pip:
+      - -e .

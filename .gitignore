@@ -1,0 +1,63 @@
+# Editor: Jialei.He
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Environments and local configuration
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+
+# Medical images, derived arrays, and datasets
+/data/
+/datasets/
+*.nii
+*.nii.gz
+*.dcm
+*.bin
+*.npy
+*.npz
+
+# Model states and experiment outputs
+checkpoints/
+experiments/
+results/
+logs/
+runs/
+wandb/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+
+# Archives and temporary files
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.tmp
+*.bak
+
+# Credentials and keys
+*.pem
+*.key
+id_rsa*
+id_ed25519*

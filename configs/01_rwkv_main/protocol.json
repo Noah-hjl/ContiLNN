@@ -1,0 +1,57 @@
+{
+  "editor": "Jialei.He",
+  "paper_order": 1,
+  "experiment": "contilnn_rwkv_main",
+  "backbone": "Restore-RWKV",
+  "operator": "bidirectional_cfc",
+  "num_seeds": 5,
+  "model": {
+    "dim": 48,
+    "cfc_hidden": 256
+  },
+  "modalities": {
+    "CT": {"train_cases": 8, "validation_cases": 1, "test_cases": 1, "epoch_cap": 60},
+    "MRI": {"train_cases": 405, "validation_cases": 58, "test_cases": 114, "epoch_cap": 100},
+    "PET": {"train_cases": 120, "validation_cases": 10, "test_cases": 29, "epoch_cap": 60}
+  },
+  "data": {
+    "sequence_length": 7,
+    "patch_size": 128,
+    "slice_index_gap": 1,
+    "retain_short_tail": true,
+    "evaluation_offsets": [0, 3],
+    "overlap_fusion": "mean"
+  },
+  "stage_a": {
+    "updates": 300000,
+    "batch_size_slices": 4,
+    "optimizer": "Adam",
+    "objective": "L1",
+    "learning_rate_start": 0.0002,
+    "learning_rate_end": 0.000001,
+    "checkpoint_selection": "highest_validation_psnr"
+  },
+  "stage_b": {
+    "optimizer": "AdamW",
+    "scheduler": "CosineAnnealingLR",
+    "scheduler_interval": "epoch",
+    "precision": "amp_fp16",
+    "batch_size": 1,
+    "weight_decay": 0.0,
+    "learning_rate_backbone": 0.0002,
+    "learning_rate_operator": 0.0002,
+    "learning_rate_gate": 0.0005,
+    "learning_rate_end": 0.000001,
+    "gradient_clip_norm": 1.0,
+    "early_stopping_start_epoch": 15,
+    "early_stopping_patience": 10,
+    "early_stopping_min_delta_db": 0.0005,
+    "checkpoint_selection": "highest_validation_psnr"
+  },
+  "objective": {
+    "reconstruction": 1.0,
+    "consistency": 0.30,
+    "second_order_multiplier": 2.0,
+    "teacher_distillation": 0.05
+  }
+}

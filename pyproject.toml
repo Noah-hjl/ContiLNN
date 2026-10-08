@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "contilnn"
+version = "0.1.0.dev0"
+description = "Bidirectional liquid slice dynamics for 2.5D medical image restoration"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+  {name = "Jialei.He"},
+]
+dependencies = [
+  "einops>=0.6",
+  "ncps>=0.0.7",
+  "numpy>=1.23,<2",
+  "SimpleITK>=2.2",
+  "torch>=2.0",
+]
+
+[project.optional-dependencies]
+dasmamba = [
+  "causal-conv1d>=1.1",
+  "mamba-ssm>=1.2",
+  "timm>=0.9",
+]
+[project.scripts]
+contilnn = "contilnn.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Noah-hjl/ContiLNN"
+Repository = "https://github.com/Noah-hjl/ContiLNN"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"contilnn.models" = ["cuda/*.cpp", "cuda/*.cu"]
+
+[tool.setuptools.data-files]
+"share/contilnn/configs/01_rwkv_main" = ["configs/01_rwkv_main/protocol.json"]
+"share/contilnn/configs/02_dasmamba_transfer" = ["configs/02_dasmamba_transfer/protocol.json"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
