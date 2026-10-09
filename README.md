@@ -2,9 +2,8 @@
 
 <!-- Editor: Jialei.He -->
 
-Official code repository for
-[**ContiLNN: Mitigating Slice Sampling Discontinuity with Liquid Neural Networks
-for Medical Image Restoration**](https://arxiv.org/abs/2610.12337).
+[**Mitigating Slice Sampling Discontinuity with Liquid Neural Networks for
+Medical Image Restoration**](https://arxiv.org/abs/2610.12337)
 
 ContiLNN equips established two-dimensional medical-image restoration
 backbones with position-aligned, bidirectional closed-form continuous-time
